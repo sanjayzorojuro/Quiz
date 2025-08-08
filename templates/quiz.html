@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz Page{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        background: linear-gradient(135deg, #d4fc79, #96e6a1, #89f7fe, #66a6ff);
+        background-size: 400% 400%;
+        animation: gradientShift 10s ease infinite;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .quiz-box {
+        background: linear-gradient(135deg, #fffcd4 50%, #83d8ff 100%);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 60px auto;
+        animation: fadeInCard 1.2s ease-in-out;
+        transition: transform 0.4s ease;
+    }
+
+    .quiz-box:hover {
+        transform: scale(1.01);
+    }
+
+    @keyframes fadeInCard {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h1 {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        animation: fadeInUp 0.8s ease-in;
+    }
+
+    .question-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #444;
+        margin-bottom: 20px;
+        animation: fadeInUp 1s ease-in;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-check {
+        display: block;
+        margin-bottom: 15px;
+        animation: fadeInUp 1.2s ease;
+    }
+
+    .form-check-input {
+        display: none;
+    }
+
+    .form-check-label {
+        display: block;
+        background: #f1f3f5;
+        padding: 15px 20px;
+        border-radius: 10px;
+        font-size: 1rem;
+        color: #555;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .form-check-label:hover {
+        background-color: #e2e6ea;
+    }
+
+    .form-check-input:checked + .form-check-label {
+        background-color: #d0e7ff;
+        border-color: #0d6efd;
+        font-weight: 500;
+        color: #0d6efd;
+    }
+
+    .btn-primary {
+        padding: 12px 35px;
+        font-size: 1.1rem;
+        border-radius: 30px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+        transform: scale(1.05);
+    }
+
+    .btn-outline-secondary {
+        padding: 12px 35px;
+        font-size: 1.1rem;
+        border-radius: 30px;
+        color: #6c757d;
+        border: 2px solid #6c757d;
+        background-color: transparent;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .text-center p {
+        color: #666;
+    }
+
+    @media (max-width: 576px) {
+        .quiz-box {
+            padding: 25px;
+        }
+
+        .btn-primary,
+        .btn-outline-secondary {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="quiz-box">
+        <h1 class="text-center">🧠 Quiz Time</h1>
+        <p class="text-center mb-4">Welcome to the quiz page! Select the correct answer.</p>
+
+        <form method="post">
+            <div class="mb-4">
+                <h4 class="question-title">1. What is the capital of France?</h4>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q1" id="option1" value="Berlin">
+                    <label class="form-check-label" for="option1">Berlin</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q1" id="option2" value="Madrid">
+                    <label class="form-check-label" for="option2">Madrid</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q1" id="option3" value="Paris">
+                    <label class="form-check-label" for="option3">Paris</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q1" id="option4" value="Rome">
+                    <label class="form-check-label" for="option4">Rome</label>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <button type="button" class="btn btn-outline-secondary">Secondary</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
