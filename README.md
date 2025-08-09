@@ -6,7 +6,8 @@ A modern, responsive quiz application built with Flask that fetches questions fr
 
 🚀 Deployed at: [[https://todo-render-2-yelb.onrender.com](https://todo-render-2-yelb.onrender.com)]
 
-```
+
+
 ## Features
 
 -  **Dynamic Questions**: Fetches questions from Open Trivia Database API
