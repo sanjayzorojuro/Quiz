@@ -1,190 +1,402 @@
 {% extends 'base.html' %}
 
-{% block title %}Quiz Page{% endblock %}
+{% block title %}JPOT - Start Quiz{% endblock %}
 
 {% block body %}
 <style>
-    body {
-        background: linear-gradient(135deg, #d4fc79, #96e6a1, #89f7fe, #66a6ff);
-        background-size: 400% 400%;
-        animation: gradientShift 10s ease infinite;
-        font-family: 'Poppins', sans-serif;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        background-attachment: fixed;
         min-height: 100vh;
+        color: #f8fafc;
+        overflow-x: hidden;
     }
 
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    /* Animated background elements */
+    .bg-decoration {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
     }
 
-    .quiz-box {
-        background: linear-gradient(135deg, #fffcd4 50%, #83d8ff 100%);
-        border-radius: 16px;
-        padding: 40px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        max-width: 800px;
-        margin: 60px auto;
-        animation: fadeInCard 1.2s ease-in-out;
-        transition: transform 0.4s ease;
+    .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        animation: float 6s ease-in-out infinite;
     }
 
-    .quiz-box:hover {
-        transform: scale(1.01);
+    .shape-1 { width: 120px; height: 120px; top: 15%; left: 8%; animation-delay: 0s; }
+    .shape-2 { width: 180px; height: 180px; top: 65%; right: 10%; animation-delay: 3s; }
+    .shape-3 { width: 90px; height: 90px; bottom: 15%; left: 15%; animation-delay: 6s; }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-25px) rotate(180deg); }
     }
 
-    @keyframes fadeInCard {
-        from {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    /* Main container */
+    .container {
+        position: relative;
+        z-index: 1;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    h1 {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 10px;
-        animation: fadeInUp 0.8s ease-in;
-    }
-
-    .question-title {
-        font-size: 1.2rem;
-        font-weight: 500;
-        color: #444;
-        margin-bottom: 20px;
-        animation: fadeInUp 1s ease-in;
+    .quiz-start-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 
+            0 1px 3px rgba(0, 0, 0, 0.05),
+            0 20px 60px rgba(0, 0, 0, 0.08),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+        animation: fadeInUp 1s ease-out;
     }
 
     @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    .form-check {
+    .quiz-start-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
+        border-radius: 24px 24px 0 0;
+    }
+
+    .quiz-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
+    .quiz-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+        letter-spacing: -0.025em;
+    }
+
+    .quiz-subtitle {
+        font-size: 1.125rem;
+        color: #cbd5e1;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .quiz-form {
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .form-label {
         display: block;
-        margin-bottom: 15px;
-        animation: fadeInUp 1.2s ease;
-    }
-
-    .form-check-input {
-        display: none;
-    }
-
-    .form-check-label {
-        display: block;
-        background: #f1f3f5;
-        padding: 15px 20px;
-        border-radius: 10px;
         font-size: 1rem;
-        color: #555;
-        border: 2px solid transparent;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        font-size: 1rem;
+        color: #f1f5f9;
+        transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #a78bfa;
+        box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: #94a3b8;
+    }
+
+    .quiz-info {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    .quiz-info h3 {
+        color: #60a5fa;
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .info-list li {
+        display: flex;
+        align-items: center;
+        color: #cbd5e1;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .info-list li::before {
+        content: '✓';
+        color: #34d399;
+        font-weight: bold;
+        margin-right: 0.5rem;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        border: none;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        justify-content: center;
     }
 
-    .form-check-label:hover {
-        background-color: #e2e6ea;
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s ease;
     }
 
-    .form-check-input:checked + .form-check-label {
-        background-color: #d0e7ff;
-        border-color: #0d6efd;
-        font-weight: 500;
-        color: #0d6efd;
+    .btn:hover::before {
+        left: 100%;
     }
 
     .btn-primary {
-        padding: 12px 35px;
-        font-size: 1.1rem;
-        border-radius: 30px;
-        transition: background-color 0.3s ease, transform 0.2s ease;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
     }
 
     .btn-primary:hover {
-        background-color: #0b5ed7;
-        transform: scale(1.05);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
     }
 
-    .btn-outline-secondary {
-        padding: 12px 35px;
-        font-size: 1.1rem;
-        border-radius: 30px;
-        color: #6c757d;
-        border: 2px solid #6c757d;
-        background-color: transparent;
-        transition: all 0.3s ease;
-        margin-top: 10px;
+    .btn-secondary {
+        background: rgba(248, 250, 252, 0.1);
+        color: #f8fafc;
+        border: 2px solid rgba(248, 250, 252, 0.2);
+        backdrop-filter: blur(10px);
+        margin-top: 1rem;
     }
 
-    .btn-outline-secondary:hover {
-        background-color: #6c757d;
-        color: white;
-        transform: scale(1.05);
+    .btn-secondary:hover {
+        background: rgba(248, 250, 252, 0.15);
+        border-color: rgba(248, 250, 252, 0.3);
+        transform: translateY(-2px);
     }
 
-    .text-center p {
-        color: #666;
+    .flash-messages {
+        margin-bottom: 1.5rem;
     }
 
-    @media (max-width: 576px) {
-        .quiz-box {
-            padding: 25px;
+    .alert {
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+
+    .alert-error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #f87171;
+    }
+
+    .alert-success {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #4ade80;
+    }
+
+    @media (max-width: 640px) {
+        .container {
+            padding: 1rem;
         }
 
-        .btn-primary,
-        .btn-outline-secondary {
-            width: 100%;
+        .quiz-start-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .quiz-title {
+            font-size: 2rem;
+        }
+
+        .quiz-icon {
+            font-size: 3rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
         }
     }
 </style>
 
+<div class="bg-decoration">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+</div>
+
 <div class="container">
-    <div class="quiz-box">
-        <h1 class="text-center">🧠 Quiz Time</h1>
-        <p class="text-center mb-4">Welcome to the quiz page! Select the correct answer.</p>
+    <div class="quiz-start-card">
+        <div class="quiz-icon">🧠</div>
+        <h1 class="quiz-title">Ready for JPOT?</h1>
+        <p class="quiz-subtitle">Test your knowledge with our interactive quiz featuring questions from various categories.</p>
 
-        <form method="post">
-            <div class="mb-4">
-                <h4 class="question-title">1. What is the capital of France?</h4>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="q1" id="option1" value="Berlin">
-                    <label class="form-check-label" for="option1">Berlin</label>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
                 </div>
+            {% endif %}
+        {% endwith %}
 
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="q1" id="option2" value="Madrid">
-                    <label class="form-check-label" for="option2">Madrid</label>
-                </div>
+        <div class="quiz-info">
+            <h3>📋 Quiz Details</h3>
+            <ul class="info-list">
+                <li>5 questions from various categories</li>
+                <li>Multiple choice format</li>
+                <li>Instant feedback on completion</li>
+                <li>Your score will be added to the leaderboard</li>
+                <li>Questions powered by Open Trivia Database</li>
+            </ul>
+        </div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="q1" id="option3" value="Paris">
-                    <label class="form-check-label" for="option3">Paris</label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="q1" id="option4" value="Rome">
-                    <label class="form-check-label" for="option4">Rome</label>
-                </div>
+        <form method="post" class="quiz-form">
+            <div class="form-group">
+                <label for="username" class="form-label">Enter your name to start:</label>
+                <input type="text" 
+                       id="username" 
+                       name="username" 
+                       class="form-input" 
+                       placeholder="Your name" 
+                       required 
+                       maxlength="50"
+                       pattern="[A-Za-z0-9\s]+"
+                       title="Please use only letters, numbers and spaces">
             </div>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary me-2">Submit</button>
-                <button type="button" class="btn btn-outline-secondary">Secondary</button>
-            </div>
+            <button type="submit" class="btn btn-primary">
+                🚀 Start Quiz
+            </button>
         </form>
+
+        <a href="/" class="btn btn-secondary">
+            🏠 Back to Home
+        </a>
     </div>
 </div>
+
+<script>
+// Form validation and enhancement
+document.querySelector('.quiz-form').addEventListener('submit', function(e) {
+    const username = document.getElementById('username').value.trim();
+    
+    if (username.length < 2) {
+        e.preventDefault();
+        alert('Please enter a name with at least 2 characters.');
+        return;
+    }
+    
+    if (username.length > 50) {
+        e.preventDefault();
+        alert('Name must be 50 characters or less.');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '⏳ Starting Quiz...';
+    submitBtn.disabled = true;
+});
+
+// Auto-focus on username input
+document.getElementById('username').focus();
+
+// Enter key submission
+document.getElementById('username').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        document.querySelector('.quiz-form').dispatchEvent(new Event('submit'));
+    }
+});
+</script>
+
 {% endblock %}

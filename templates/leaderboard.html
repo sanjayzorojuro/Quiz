@@ -1,0 +1,677 @@
+{% extends 'base.html' %}
+
+{% block title %}JPOT - Leaderboard{% endblock %}
+
+{% block body %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: #f8fafc;
+        overflow-x: hidden;
+    }
+
+    /* Animated background elements */
+    .bg-decoration {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .shape-1 { width: 120px; height: 120px; top: 15%; left: 8%; animation-delay: 0s; }
+    .shape-2 { width: 180px; height: 180px; top: 65%; right: 10%; animation-delay: 3s; }
+    .shape-3 { width: 90px; height: 90px; bottom: 15%; left: 15%; animation-delay: 6s; }
+    .shape-4 { width: 60px; height: 60px; top: 40%; right: 25%; animation-delay: 1.5s; }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-25px) rotate(180deg); }
+    }
+
+    /* Main container */
+    .container {
+        position: relative;
+        z-index: 1;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    /* Header */
+    .header {
+        text-align: center;
+        padding: 3rem 0 2rem 0;
+        animation: fadeInDown 1s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-8px); }
+        60% { transform: translateY(-4px); }
+    }
+
+    .title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+        font-size: 1.125rem;
+        color: #cbd5e1;
+        font-weight: 400;
+        margin-bottom: 3rem;
+        line-height: 1.6;
+    }
+
+    /* Leaderboard Container */
+    .leaderboard-container {
+        animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Top 3 Podium */
+    .podium-section {
+        margin-bottom: 3rem;
+        animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .podium {
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .podium-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+    .podium-item.first { order: 2; }
+    .podium-item.second { order: 1; }
+    .podium-item.third { order: 3; }
+
+    .podium-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+    }
+
+    .podium-item.first .podium-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        box-shadow: 0 12px 40px rgba(251, 191, 36, 0.4);
+    }
+
+    .podium-crown {
+        position: absolute;
+        top: -15px;
+        font-size: 1.5rem;
+        z-index: 3;
+    }
+
+    .podium-base {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px 12px 0 0;
+        padding: 1.5rem 1rem 0 1rem;
+        text-align: center;
+        position: relative;
+        min-width: 120px;
+    }
+
+    .podium-item.first .podium-base {
+        height: 120px;
+        background: rgba(251, 191, 36, 0.1);
+        border-color: rgba(251, 191, 36, 0.3);
+    }
+
+    .podium-item.second .podium-base {
+        height: 90px;
+        background: rgba(156, 163, 175, 0.1);
+        border-color: rgba(156, 163, 175, 0.3);
+    }
+
+    .podium-item.third .podium-base {
+        height: 70px;
+        background: rgba(205, 127, 50, 0.1);
+        border-color: rgba(205, 127, 50, 0.3);
+    }
+
+    .podium-name {
+        font-weight: 600;
+        color: #f1f5f9;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .podium-score {
+        font-size: 1.25rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .podium-item.first .podium-score {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Leaderboard Table */
+    .leaderboard-table {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        animation: fadeInUp 1s ease-out 0.9s both;
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .table-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #f1f5f9;
+    }
+
+    .refresh-btn {
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #60a5fa;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .refresh-btn:hover {
+        background: rgba(59, 130, 246, 0.3);
+        border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .player-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .player-row {
+        display: grid;
+        grid-template-columns: 60px 60px 1fr auto auto;
+        align-items: center;
+        gap: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        animation: slideInLeft 0.5s ease-out calc(1.2s + var(--delay, 0s)) both;
+    }
+
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .player-row:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateX(4px);
+    }
+
+    .rank-number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-align: center;
+    }
+
+    .rank-number.top-rank {
+        color: #fbbf24;
+        text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+    }
+
+    .player-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        font-size: 1.1rem;
+    }
+
+    .player-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .player-name {
+        font-weight: 600;
+        color: #f1f5f9;
+        font-size: 1rem;
+    }
+
+    .player-meta {
+        font-size: 0.875rem;
+        color: #94a3b8;
+    }
+
+    .player-score {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .accuracy-badge {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        border-radius: 20px;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    /* Navigation */
+    .navigation {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 3rem;
+        animation: fadeInUp 1s ease-out 1.5s both;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+        background: rgba(248, 250, 252, 0.1);
+        color: #f8fafc;
+        border: 2px solid rgba(248, 250, 252, 0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(248, 250, 252, 0.15);
+        border-color: rgba(248, 250, 252, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #94a3b8;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .title {
+            font-size: 2rem;
+        }
+
+        .podium {
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .podium-item {
+            order: unset !important;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .podium-base {
+            width: 100%;
+            height: auto !important;
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .player-row {
+            grid-template-columns: 40px 40px 1fr;
+            gap: 0.75rem;
+        }
+
+        .player-score,
+        .accuracy-badge {
+            grid-column: 3;
+            justify-self: end;
+            margin-top: 0.5rem;
+        }
+
+        .navigation {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 0.75rem;
+        }
+
+        .leaderboard-table {
+            padding: 1.5rem;
+        }
+
+        .player-row {
+            padding: 0.75rem;
+        }
+
+        .player-avatar {
+            width: 36px;
+            height: 36px;
+            font-size: 0.9rem;
+        }
+
+        .podium-avatar {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .podium-item.first .podium-avatar {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+        }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+
+<div class="bg-decoration">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+</div>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">🏆</div>
+        <h1 class="title">Leaderboard</h1>
+        <p class="subtitle">See how you stack up against other quiz masters!</p>
+    </header>
+
+    <div class="leaderboard-container">
+        <!-- Top 3 Podium -->
+        <section class="podium-section">
+            <div class="podium">
+                <!-- Second Place -->
+                <div class="podium-item second" style="--delay: 0.1s">
+                    <div class="podium-avatar">
+                        {{ leaderboard[1].username[0].upper() if leaderboard|length > 1 }}
+                    </div>
+                    <div class="podium-base">
+                        <div class="podium-name">{{ leaderboard[1].username if leaderboard|length > 1 else 'No Player' }}</div>
+                        <div class="podium-score">{{ leaderboard[1].score if leaderboard|length > 1 else '0' }}</div>
+                    </div>
+                </div>
+
+                <!-- First Place -->
+                <div class="podium-item first" style="--delay: 0s">
+                    <div class="podium-crown">👑</div>
+                    <div class="podium-avatar">
+                        {{ leaderboard[0].username[0].upper() if leaderboard|length > 0 }}
+                    </div>
+                    <div class="podium-base">
+                        <div class="podium-name">{{ leaderboard[0].username if leaderboard|length > 0 else 'No Player' }}</div>
+                        <div class="podium-score">{{ leaderboard[0].score if leaderboard|length > 0 else '0' }}</div>
+                    </div>
+                </div>
+
+                <!-- Third Place -->
+                <div class="podium-item third" style="--delay: 0.2s">
+                    <div class="podium-avatar">
+                        {{ leaderboard[2].username[0].upper() if leaderboard|length > 2 }}
+                    </div>
+                    <div class="podium-base">
+                        <div class="podium-name">{{ leaderboard[2].username if leaderboard|length > 2 else 'No Player' }}</div>
+                        <div class="podium-score">{{ leaderboard[2].score if leaderboard|length > 2 else '0' }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full Leaderboard Table -->
+        <section class="leaderboard-table">
+            <div class="table-header">
+                <h2 class="table-title">Complete Rankings</h2>
+                <button class="refresh-btn" onclick="location.reload()">
+                    🔄 Refresh
+                </button>
+            </div>
+
+            <div class="player-list">
+                {% if leaderboard %}
+                    {% for player in leaderboard %}
+                    <div class="player-row" style="--delay: {{ loop.index0 * 0.1 }}s">
+                        <div class="rank-number {% if loop.index <= 3 %}top-rank{% endif %}">
+                            #{{ loop.index }}
+                        </div>
+                        <div class="player-avatar">
+                            {{ player.username[0].upper() }}
+                        </div>
+                        <div class="player-info">
+                            <div class="player-name">{{ player.username }}</div>
+                            <div class="player-meta">
+                                {{ player.quizzes_taken }} quiz{% if player.quizzes_taken != 1 %}zes{% endif %} taken
+                                {% if player.last_played %}
+                                    • Last played {{ player.last_played.strftime('%b %d') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="player-score">{{ player.score }}</div>
+                        <div class="accuracy-badge">
+                            {{ ((player.score / (player.quizzes_taken * 100)) * 100)|round(1) if player.quizzes_taken > 0 else 0 }}%
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">🎯</div>
+                        <h3>No players yet!</h3>
+                        <p>Be the first to take a quiz and claim the top spot.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <a href="/quiz" class="btn btn-primary">
+            🧠 Take a Quiz
+        </a>
+        <a href="/" class="btn btn-secondary">
+            🏠 Back to Home
+        </a>
+    </nav>
+</div>
+
+<script>
+// Auto-refresh leaderboard every 30 seconds
+setInterval(function() {
+    const refreshBtn = document.querySelector('.refresh-btn');
+    if (refreshBtn) {
+        refreshBtn.style.animation = 'spin 0.5s ease';
+        setTimeout(() => {
+            refreshBtn.style.animation = '';
+        }, 500);
+    }
+}, 30000);
+
+// Add smooth scroll behavior
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Add loading animation for refresh button
+document.querySelector('.refresh-btn').addEventListener('click', function() {
+    this.style.animation = 'spin 1s linear';
+    setTimeout(() => {
+        this.style.animation = '';
+    }, 1000);
+});
+
+// CSS for spin animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+{% endblock %}
