@@ -112,7 +112,6 @@ If the API is unavailable, the system uses built-in questions covering:
 ```python
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///Quiz.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SECRET_KEY"] = "your-secret-key-here"  # Change this!
 ```
 
 ### Quiz Settings
