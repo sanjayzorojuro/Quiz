@@ -1,32 +1,32 @@
-# JPOT - Interactive Quiz Platform 🧠
+# JPOT - Interactive Quiz Platform 
 
 A modern, responsive quiz application built with Flask that fetches questions from the Open Trivia Database API and features a beautiful glassmorphism design.
 
 ## Features
 
-- 🎯 **Dynamic Questions**: Fetches questions from Open Trivia Database API
-- 🏆 **Leaderboard System**: Track scores and compete with other players  
-- 📱 **Responsive Design**: Works perfectly on desktop, tablet, and mobile
-- 🎨 **Modern UI**: Glassmorphism design with smooth animations
-- 💾 **Database Integration**: SQLite database for user scores and quiz history
-- 🔄 **Fallback Questions**: Built-in questions if API is unavailable
-- ⚡ **Real-time Progress**: Live progress tracking during quiz
+-  **Dynamic Questions**: Fetches questions from Open Trivia Database API
+-  **Leaderboard System**: Track scores and compete with other players  
+-  **Responsive Design**: Works perfectly on desktop, tablet, and mobile
+-  **Modern UI**: Glassmorphism design with smooth animations
+-  **Database Integration**: SQLite database for user scores and quiz history
+-  **Fallback Questions**: Built-in questions if API is unavailable
+-  **Real-time Progress**: Live progress tracking during quiz
 
 ## Project Structure
 
 ```
 jpot-quiz/
-├── app.py                 # Main Flask application
-├── requirements.txt       # Python dependencies
-├── Quiz.db               # SQLite database (auto-created)
+├── app.py                 
+├── requirements.txt       
+├── Quiz.db               
 ├── templates/
-│   ├── base.html         # Base template with navigation
-│   ├── home.html         # Landing page
-│   ├── quiz.html         # Quiz start page
-│   ├── question.html     # Individual question page
-│   ├── result.html       # Quiz results page
-│   └── leaderboard.html  # Leaderboard page
-└── static/               # Static files (optional)
+│   ├── base.html         
+│   ├── home.html        
+│   ├── quiz.html        
+│   ├── question.html     
+│   ├── result.html       
+│   └── leaderboard.html  
+└── static/              
 ```
 
 ## Installation & Setup
@@ -59,8 +59,6 @@ pip install -r requirements.txt
 ```bash
 python app.py
 ```
-
-The application will be available at `http://localhost:5000`
 
 ## Database Schema
 
@@ -95,16 +93,6 @@ If the API is unavailable, the system uses built-in questions covering:
 - Art
 - General Knowledge
 
-## Routes
-
-| Route | Method | Description |
-|-------|--------|-------------|
-| `/` | GET | Home page |
-| `/quiz` | GET, POST | Quiz start/name entry |
-| `/question` | GET, POST | Individual questions |
-| `/result` | GET | Quiz results |
-| `/leaderboard` | GET | Leaderboard display |
-| `/api/categories` | GET | Available quiz categories |
 
 ## Configuration
 
@@ -151,18 +139,7 @@ The CSS uses CSS custom properties for easy theming:
 - Background: Gradient from `#0f172a` to `#334155`
 - Glassmorphism: `backdrop-filter: blur(20px)`
 
-## Deployment
 
-### Local Development
-```bash
-python app.py
-```
-
-### Production Deployment
-1. Set `debug=False` in `app.py`
-2. Use a production WSGI server like Gunicorn
-3. Set a secure `SECRET_KEY`
-4. Consider using PostgreSQL instead of SQLite
 
 ### Environment Variables
 Create a `.env` file for production:
@@ -172,50 +149,34 @@ DATABASE_URL=sqlite:///Quiz.db
 FLASK_ENV=production
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-**Database not creating**:
-```bash
-python -c "from app import app, db; app.app_context().push(); db.create_all(); print('Database created!')"
-```
 
 **API not working**:
 - Check internet connection
 - The app will automatically use fallback questions
 - Verify API is accessible: `https://opentdb.com/api.php?amount=1&type=multiple`
 
-**Session issues**:
-- Ensure `SECRET_KEY` is set
-- Clear browser cookies/storage
 
-**Port already in use**:
-```bash
-# Change port in app.py
-app.run(debug=True, port=5001)
-```
 
 ## Features Overview
 
-### 🏠 Home Page
+###  Home Page
 - Modern landing page with animated elements
 - Feature showcase and statistics
 - Call-to-action buttons for quiz and leaderboard
 
-### 🧠 Quiz System
+###  Quiz System
 - User name input with validation
 - Dynamic question loading from API
 - Progress tracking with visual indicators
 - Real-time answer validation
 
-### 🏆 Leaderboard
+###  Leaderboard
 - Top 3 podium display with special styling
 - Complete rankings table with user statistics
 - Auto-refresh functionality
 - Responsive design for mobile
 
-### 📊 Results Page
+### Results Page
 - Detailed score breakdown
 - Performance categorization (Excellent, Good, etc.)
 - Celebration animations for high scores
