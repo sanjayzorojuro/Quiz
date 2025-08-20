@@ -368,10 +368,10 @@
         {% set performance_class = 'excellent' if percentage >= 80 else 'good' if percentage >= 60 else 'average' if percentage >= 40 else 'needs-improvement' %}
         
         <div class="result-icon {{ performance_class }}">
-            {% if percentage >= 80 %}🏆
-            {% elif percentage >= 60 %}🎉
-            {% elif percentage >= 40 %}👍
-            {% else %}📚
+            {% if percentage >= 80 %}
+            {% elif percentage >= 60 %}
+            {% elif percentage >= 40 %}
+            {% else %}
             {% endif %}
         </div>
         
@@ -386,13 +386,13 @@
 
         <div class="performance-message {{ performance_class }}">
             {% if percentage >= 80 %}
-                🌟 Outstanding performance! You're a true quiz master!
+                Outstanding performance! You're a true quiz master!
             {% elif percentage >= 60 %}
-                🎯 Well done! You have good knowledge across various topics.
+                 Well done! You have good knowledge across various topics.
             {% elif percentage >= 40 %}
-                💪 Not bad! Keep learning and you'll improve even more.
+                 Not bad! Keep learning and you'll improve even more.
             {% else %}
-                🎓 Every expert was once a beginner. Keep practicing!
+                 Every expert was once a beginner. Keep practicing!
             {% endif %}
         </div>
 
@@ -413,13 +413,13 @@
 
         <div class="action-buttons">
             <a href="{{ url_for('quiz') }}" class="btn btn-primary">
-                🔄 Take Another Quiz
+                 Take Another Quiz
             </a>
             <a href="{{ url_for('leaderboard') }}" class="btn btn-accent">
-                🏆 View Leaderboard
+                 View Leaderboard
             </a>
             <a href="{{ url_for('home') }}" class="btn btn-secondary">
-                🏠 Back to Home
+                 Back to Home
             </a>
         </div>
     </div>
