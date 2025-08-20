@@ -554,7 +554,6 @@
 
                 <!-- First Place -->
                 <div class="podium-item first" style="--delay: 0s">
-                    <div class="podium-crown">👑</div>
                     <div class="podium-avatar">
                         {{ leaderboard[0].username[0].upper() if leaderboard|length > 0 }}
                     </div>
@@ -582,7 +581,7 @@
             <div class="table-header">
                 <h2 class="table-title">Complete Rankings</h2>
                 <button class="refresh-btn" onclick="location.reload()">
-                    🔄 Refresh
+                    Refresh
                 </button>
             </div>
 
@@ -613,7 +612,6 @@
                     {% endfor %}
                 {% else %}
                     <div class="empty-state">
-                        <div class="empty-icon">🎯</div>
                         <h3>No players yet!</h3>
                         <p>Be the first to take a quiz and claim the top spot.</p>
                     </div>
