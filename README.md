@@ -5,7 +5,7 @@ A modern, responsive quiz application built with Flask that fetches questions fr
 ## 🔗 Live Demo
 
 🚀 Deployed at: https://jpot.onrender.com
-
+ 
 
 
 ## Features
@@ -207,5 +207,5 @@ This project is open source and available under the [MIT License](LICENSE).
 - **Icons**: Unicode emojis for universal compatibility
 - **Framework**: Flask with SQLAlchemy and Jinja2
 
----
+---    
 
