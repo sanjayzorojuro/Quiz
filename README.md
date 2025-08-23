@@ -18,7 +18,7 @@ A modern, responsive quiz application built with Flask that fetches questions fr
 -  **Fallback Questions**: Built-in questions if API is unavailable
 -  **Real-time Progress**: Live progress tracking during quiz
 
-## Project Structure
+## Project Structure 
 
 ```
 jpot-quiz/
